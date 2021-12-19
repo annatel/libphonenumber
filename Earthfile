@@ -26,7 +26,7 @@ libphonenumber:
 docker:
     FROM alpine:3.12.1
 
-    COPY --dir +libphonenumber/build ./libphonenumber/build
+    COPY --dir +libphonenumber/build /usr/local/lib/libphonenumber
     WORKDIR /libphonenumber
     ARG EARTHLY_GIT_PROJECT_NAME=annatel/libphonenumber
     ARG TAG
