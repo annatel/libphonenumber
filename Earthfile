@@ -25,7 +25,7 @@ libphonenumber:
     RUN cmake ..
     RUN make
 
-    RUN zip -r libphonenumber.zip  'libgeocoding*' 'libphonenumber*'
+    RUN  zip -r libphonenumber.zip .
 
     SAVE ARTIFACT /libphonenumber/cpp/build/libphonenumber.zip AS LOCAL cpp/build/libphonenumber.zip
 
