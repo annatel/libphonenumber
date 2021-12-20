@@ -25,13 +25,10 @@ libphonenumber:
 
     WORKDIR /libphonenumber/cpp
     RUN mkdir -p assets/build
-    RUN ls -la
     RUN find ./build -type f -name "libphonenumber*" -exec cp {} assets/build \;
     RUN find ./build -type f -name "libgeocoding*" -exec cp {} assets/build \;
-    RUN ls assets/build
     RUN mkdir -p assets/phonenumbers
     RUN find ./src/phonenumbers -type f -name "*.h" -exec cp {} assets/phonenumbers \;
-    RUN ls assets/phonenumbers
     RUN zip -r assets.zip assets/
 
     SAVE ARTIFACT /libphonenumber/cpp/assets.zip AS LOCAL cpp/assets.zip
