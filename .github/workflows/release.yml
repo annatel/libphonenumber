@@ -26,10 +26,10 @@ jobs:
       - name: Build Assets
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: earthly +libphonenumber | zip --junk-paths
+        run: earthly +libphonenumber
       
-      - name: Upload build
+      - name: libphonenumber.a 
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./build
+          asset_path: cpp/build/libphonenumber.a
