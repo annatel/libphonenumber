@@ -5,36 +5,45 @@ on:
     types:
       - created
 
-env:
-  REGISTRY: ghcr.io
-
 jobs:
-  build-and-push-image:
+  build-asset:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
-      packages: write
+      contents: write
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    # steps:
+    #   - name: Checkout repository
+    #     uses: actions/checkout@v2
 
-      - name: Download latest earthly
-        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.22/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+    #   - name: Download latest earthly
+    #     run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.22/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
 
-      - name: Set output
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+    #   - name: Set output
+    #     id: vars
+    #     run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
-      - name: Build Assets
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: earthly +libphonenumber
+    #   - name: Build Assets
+    #     env:
+    #       RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+    #     run: earthly +libphonenumber
       
-      - name: Upload libphonenumber.a 
-        uses: shogo82148/actions-upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: cpp/build/libphonenumber.a
+    #   - name: libphonenumber.a 
+    #     uses: shogo82148/actions-upload-release-asset@v1
+    #     with:
+    #       upload_url: ${{ github.event.release.upload_url }}
+    #       asset_path: cpp/build/libphonenumber.a
+    steps:
+      - uses: actions/checkout@v2
 
+      # steps for building assets
+      - run: echo "REPLACE ME!" > assets.txt
+
+      - name: Create Release
+        id: create_release
+        uses: shogo82148/actions-create-release@v1
+
+      - uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: assets.txt
