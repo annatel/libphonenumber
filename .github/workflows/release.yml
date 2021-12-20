@@ -10,24 +10,31 @@ env:
 
 jobs:
   build-and-push-image:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
-    container:
-      image: alpine/git
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Building assets
-        run: echo "REPLACE ME!" > assets.txt
+      - name: Download latest earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.22/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
 
-      # - name: Set output
-      #   id: vars
-      #   run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
-      - name: upload asset
+      - name: Build Assets
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+        run: earthly +libphonenumber
+      
+      - name: Upload libphonenumber.a 
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: assets.txt
+          asset_path: cpp/build/libphonenumber.a
+

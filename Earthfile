@@ -2,7 +2,6 @@ VERSION 0.5
 
 alpine-base:
     FROM alpine:3.12.1
-    WORKDIR /app
     RUN apk add --no-progress --update git build-base
     RUN apk --no-cache --update add libgcc libstdc++ \
         git make g++ \
@@ -13,25 +12,18 @@ alpine-base:
 
 libphonenumber:
     FROM +alpine-base
-    WORKDIR /google
-    GIT CLONE --branch antl https://github.com/annatel/libphonenumber.git libphonenumber
-    WORKDIR /google/libphonenumber
+
+    WORKDIR /libphonenumber/cpp    
+    COPY --dir cpp/src cpp/test .
+    COPY cpp/CMakeLists.txt .
+
+    WORKDIR /libphonenumber
+    COPY --dir metadata resources tools .
     
-    WORKDIR /google/libphonenumber/cpp/build 
+    WORKDIR /libphonenumber/cpp/build 
+
     RUN cmake ..
     RUN make
 
-    SAVE ARTIFACT /google/libphonenumber/cpp/build
-
-docker:
-    FROM alpine:3.12.1
-
-    COPY --dir +libphonenumber/build /usr/local/lib/libphonenumber
-    WORKDIR /libphonenumber
-    ARG EARTHLY_GIT_PROJECT_NAME=annatel/libphonenumber
-    ARG TAG
-  
-    SAVE IMAGE --push ghcr.io/$EARTHLY_GIT_PROJECT_NAME:$TAG
-
-
+    SAVE ARTIFACT /libphonenumber/cpp/build AS LOCAL cpp/
 
