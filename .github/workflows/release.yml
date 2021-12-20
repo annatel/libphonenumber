@@ -10,33 +10,24 @@ env:
 
 jobs:
   build-and-push-image:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    runs-on: self-hosted
+
+    container:
+      image: alpine/git
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      - name: Building assets
+        run: echo "REPLACE ME!" > assets.txt
+
+      # - name: Set output
+      #   id: vars
+      #   run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: upload asset
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download latest earthly
-        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.22/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-
-      - name: Set output
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-
-      - name: Docker registry
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: earthly --build-arg TAG=$RELEASE_VERSION --push +docker
-
-      - name: Build latest
-        run: earthly --build-arg TAG=antl-latest --push +docker
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: assets.txt
