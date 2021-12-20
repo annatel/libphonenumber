@@ -2,7 +2,7 @@ VERSION 0.5
 
 alpine-base:
     FROM alpine:3.12.1
-    RUN apk add --no-progress --update git build-base
+    RUN apk add --no-progress --update git build-base zip
     RUN apk --no-cache --update add libgcc libstdc++ \
         git make g++ \
         build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl \
@@ -25,5 +25,7 @@ libphonenumber:
     RUN cmake ..
     RUN make
 
-    SAVE ARTIFACT /libphonenumber/cpp/build AS LOCAL cpp/
+    RUN zip -r libphonenumber.zip  'libgeocoding*' 'libphonenumber*'
+
+    SAVE ARTIFACT /libphonenumber/cpp/build/libphonenumber.zip AS LOCAL cpp/build/libphonenumber.zip
 

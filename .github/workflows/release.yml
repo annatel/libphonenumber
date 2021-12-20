@@ -28,8 +28,8 @@ jobs:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: earthly +libphonenumber
       
-      - name: libphonenumber.a 
+      - name: libphonenumber.zip 
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: cpp/build/libphonenumber.a
+          asset_path: cpp/build/libphonenumber.zip
