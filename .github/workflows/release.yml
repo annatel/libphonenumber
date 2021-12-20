@@ -28,7 +28,7 @@ jobs:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: earthly +libphonenumber
       
-      - name: libphonenumber.zip 
+      - name: Upload assets 
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
