@@ -27,8 +27,11 @@ libphonenumber:
     RUN mkdir -p assets/build
     RUN find ./build -type f -name "libphonenumber*" -exec cp {} assets/build \;
     RUN find ./build -type f -name "libgeocoding*" -exec cp {} assets/build \;
-    RUN mkdir -p assets/phonenumbers
-    RUN find ./src/phonenumbers -type f -name "*.h" -exec cp {} assets/phonenumbers \;
+    RUN mkdir -p assets/includes/phonenumbers/{base,geocoding,utf}
+    RUN find ./src/phonenumbers  -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers \;
+    RUN find ./src/phonenumbers/base -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers/base \;
+    RUN find ./src/phonenumbers/geocoding -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers/geocoding \;
+    RUN find ./src/phonenumbers/utf -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers/utf \;
     RUN zip -r assets.zip assets/
 
     SAVE ARTIFACT /libphonenumber/cpp/assets.zip AS LOCAL cpp/assets.zip
