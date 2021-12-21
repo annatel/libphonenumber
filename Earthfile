@@ -27,7 +27,9 @@ libphonenumber:
     RUN mkdir -p assets/lib
     RUN find ./build -type f -name "libphonenumber*" -exec cp {} assets/lib \;
     RUN find ./build -type f -name "libgeocoding*" -exec cp {} assets/lib \;
-    RUN mkdir -p assets/includes/phonenumbers/{base,geocoding,utf}
+    RUN mkdir -p assets/includes/phonenumbers/base
+    RUN mkdir -p assets/includes/phonenumbers/geocoding
+    RUN mkdir -p assets/includes/phonenumbers/utf
     RUN find ./src/phonenumbers  -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers \;
     RUN find ./src/phonenumbers/base -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers/base \;
     RUN find ./src/phonenumbers/geocoding -maxdepth 1 -type f -name "*.h" -exec cp {} assets/includes/phonenumbers/geocoding \;
