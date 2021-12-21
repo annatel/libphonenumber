@@ -1,7 +1,7 @@
 VERSION 0.5
 
 alpine-base:
-    FROM alpine:3.14.2
+    FROM elixir:1.12.2-alpine
     RUN apk add --no-progress --update git build-base zip
     RUN apk --no-cache --update add libgcc libstdc++ \
         git make g++ \
@@ -26,11 +26,13 @@ libphonenumber:
     WORKDIR /libphonenumber/cpp
     RUN mkdir -p assets/lib
     RUN find ./build -type f -name "libphonenumber*" -exec cp {} assets/lib \;
+    RUN find ./build -type l -name "libphonenumber*" -exec cp {} assets/lib \;
     RUN find ./build -type f -name "libgeocoding*" -exec cp {} assets/lib \;
+    RUN find ./build -type l -name "libgeocoding*" -exec cp {} assets/lib \;
 
-    RUN mkdir -p assets/includes/phonenumbers
+    RUN mkdir -p assets/include/phonenumbers
     WORKDIR /libphonenumber/cpp/src/phonenumbers
-    RUN find . -type f -name "*.h" -exec cp --parents \{\} ../../assets/includes/phonenumbers \;
+    RUN find . -type f -name "*.h" -exec cp --parents \{\} ../../assets/include/phonenumbers \;
 
     WORKDIR /libphonenumber/cpp
     RUN zip -r assets.zip assets/
