@@ -19,8 +19,8 @@ libphonenumber:
     RUN mkdir ./assets
     RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
     RUN make install
-    RUN zip -r assets.zip assets/
-    RUN false
+    WORKDIR assets
+    RUN zip -r ../assets.zip *
 
     SAVE ARTIFACT /libphonenumber/cpp/build/assets.zip AS LOCAL cpp/build/assets.zip
 
