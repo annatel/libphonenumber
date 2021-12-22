@@ -12,30 +12,15 @@ alpine-base:
 libphonenumber:
     FROM +alpine-base
 
-    WORKDIR /libphonenumber/cpp    
-    COPY --dir cpp/src cpp/test .
-    COPY cpp/CMakeLists.txt .
-
     WORKDIR /libphonenumber
-    COPY --dir metadata resources tools .
+    COPY --dir . .
     
-    WORKDIR /libphonenumber/cpp/build 
-    RUN cmake ..
-    RUN make
-
-    WORKDIR /libphonenumber/cpp
-    RUN mkdir -p assets/lib
-    RUN find ./build -type f -name "libphonenumber*" -exec cp {} assets/lib \;
-    RUN find ./build -type l -name "libphonenumber*" -exec cp {} assets/lib \;
-    RUN find ./build -type f -name "libgeocoding*" -exec cp {} assets/lib \;
-    RUN find ./build -type l -name "libgeocoding*" -exec cp {} assets/lib \;
-
-    RUN mkdir -p assets/include/phonenumbers
-    WORKDIR /libphonenumber/cpp/src/phonenumbers
-    RUN find . -type f -name "*.h" -exec cp --parents \{\} ../../assets/include/phonenumbers \;
-
-    WORKDIR /libphonenumber/cpp
+    WORKDIR /libphonenumber/cpp/build
+    RUN mkdir ./assets
+    RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
+    RUN make install
     RUN zip -r assets.zip assets/
+    RUN false
 
-    SAVE ARTIFACT /libphonenumber/cpp/assets.zip AS LOCAL cpp/assets.zip
+    SAVE ARTIFACT /libphonenumber/cpp/build/assets.zip AS LOCAL cpp/build/assets.zip
 
