@@ -17,11 +17,12 @@ libphonenumber:
     COPY --dir . .
 
     # kludge: COPY creates files in the past causing make not rebuild some resources
-    RUN find . -print0 | xargs -0 touch
+    # RUN find . -print0 | xargs -0 touch
+    RUN touch /libphonenumber/resources/PhoneNumberMetadata.xml
     
     WORKDIR /libphonenumber/cpp/build
     RUN mkdir ./assets
-    RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets -DREGENERATE_METADATA=ON ..
+    RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
     RUN make install
 
     WORKDIR assets
