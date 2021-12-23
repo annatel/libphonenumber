@@ -21,7 +21,7 @@ libphonenumber:
     
     WORKDIR /libphonenumber/cpp/build
     RUN mkdir ./assets
-    RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
+    RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets -DREGENERATE_METADATA=ON ..
     RUN make install
 
     WORKDIR assets
