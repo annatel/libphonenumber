@@ -29,4 +29,4 @@ jobs:
       - name: Upload assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload --clobber ${{ steps.vars.outputs.tag }} "cpp/build/assets.zip#${{ github.event.release.upload_url }}"
+        run: gh release upload --clobber ${{ steps.vars.outputs.tag }} "cpp/build/assets.zip"
