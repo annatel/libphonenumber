@@ -1,7 +1,7 @@
 VERSION 0.5
 
 alpine-base:
-    FROM elixir:1.12.2-alpine
+    FROM alpine:3.14.2
     RUN apk add --no-progress --update git build-base zip
     RUN apk --no-cache --update add libgcc libstdc++ \
         git make g++ \
