@@ -18,7 +18,7 @@ cmake_minimum_required (VERSION 3.11)
 
 # Pick the C++ standard to compile with.
 # Abseil currently supports C++11, C++14, and C++17.
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project (libphonenumber)
