@@ -30,5 +30,4 @@ jobs:
       - name: Upload assets
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.arch}}.zip"
-        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_arm64.arch}}.zip"
+        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.arch}}.zip" "cpp/build/assets_linux_arm64.arch}}.zip"
