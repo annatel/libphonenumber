@@ -8,29 +8,27 @@ on:
 jobs:
   build-asset:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [linux]
-        arch: [amd64, arm64]
-
     permissions:
       contents: write
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
       - name: Download latest earthly
         run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.30/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-
-      - name: Build Assets
-        run: earthly +libphonenumber --platform=${{matrix.os}}/${{matrix.arch}}
-
+      - name: Build amd64 assets
+        run: earthly +libphonenumber --platform=linux/amd64
+      - name: Build arm64 assets
+        run: earthly +libphonenumber --platform=linux/arm64
       - name: Set output
         id: vars
         run: echo tag=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
-
       - name: Upload assets
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload --clobber ${{ steps.vars.outputs.tag }} "cpp/build/assets_${{matrix.os}}_${{matrix.arch}}.zip"
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.arch}}.zip"
+        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_arm64.arch}}.zip"
