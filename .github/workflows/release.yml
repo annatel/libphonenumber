@@ -20,14 +20,14 @@ jobs:
           platforms: all
       - name: Download latest earthly
         run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.30/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-      - name: Build amd64 assets
-        run: earthly +libphonenumber --platform=linux/amd64
       - name: Build arm64 assets
-        run: earthly +libphonenumber --platform=linux/arm64
+        run: earthly --platform=linux/arm64 +libphonenumber
+      - name: Build amd64 assets
+        run: earthly --platform=linux/amd64 +libphonenumber
       - name: Set output
         id: vars
         run: echo tag=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
       - name: Upload assets
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.arch}}.zip" "cpp/build/assets_linux_arm64.arch}}.zip"
+        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.zip" "cpp/build/assets_linux_arm64.zip"
