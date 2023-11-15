@@ -1,7 +1,7 @@
 VERSION 0.5
 
 alpine-base:
-    FROM alpine:3.17
+    FROM --platform=$BUILDPLATFORM alpine:3.17
     RUN apk add --no-progress --update git build-base zip
     RUN apk --no-cache --update add libgcc libstdc++ \
         git make g++ \
@@ -13,19 +13,22 @@ alpine-base:
 libphonenumber:
     FROM +alpine-base
 
+    ARG TARGETOS
+    ARG TARGETARCH
+
     WORKDIR /libphonenumber
     COPY --dir . .
 
     # kludge: COPY creates files in the past causing make not rebuild some resources
     # RUN find . -print0 | xargs -0 touch
     RUN touch /libphonenumber/resources/PhoneNumberMetadata.xml
-    
+
     WORKDIR /libphonenumber/cpp/build
-    RUN mkdir ./assets
+    RUN mkdir assets
     RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
     RUN make install
 
     WORKDIR assets
-    RUN zip -r ../assets.zip *
-    
-    SAVE ARTIFACT /libphonenumber/cpp/build/assets.zip AS LOCAL cpp/build/assets.zip
+    RUN zip -r ../assets_${TARGETOS}_${TARGETARCH}.zip *
+
+    SAVE ARTIFACT /libphonenumber/cpp/build/assets_${TARGETOS}_${TARGETARCH}.zip AS LOCAL cpp/build/assets_${TARGETOS}_${TARGETARCH}.zip

@@ -8,6 +8,10 @@ on:
 jobs:
   build-asset:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [linux]
+        arch: [amd64, arm64]
 
     permissions:
       contents: write
@@ -17,11 +21,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download latest earthly
-        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.22/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.30/earthly-${{matrix.os}}-${{matrix.arch}} -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
 
       - name: Build Assets
-        run: earthly +libphonenumber
-      
+        run: earthly +libphonenumber --platform=${{matrix.os}}/${{matrix.arch}}
+
       - name: Set output
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
@@ -29,4 +33,4 @@ jobs:
       - name: Upload assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload --clobber ${{ steps.vars.outputs.tag }} "cpp/build/assets.zip"
+        run: gh release upload --clobber ${{ steps.vars.outputs.tag }} "cpp/build/assets_${{matrix.os}}_${{matrix.arch}}.zip"
