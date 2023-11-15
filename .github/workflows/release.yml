@@ -6,10 +6,6 @@ on:
       - published
 
 jobs:
-  build-assets:
-    needs:
-      - build-assets-linux-amd64
-      - build-assets-linux-arm64
   prepare-build:
     runs-on: ubuntu-latest
     steps:
