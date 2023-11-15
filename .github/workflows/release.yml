@@ -24,7 +24,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.zip"
-  build-asset-linux-amd64:
+  build-asset-linux-arm64:
     runs-on: ubuntu-latest
     permissions:
       contents: write
