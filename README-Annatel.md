@@ -36,6 +36,10 @@
 - you should now see the assets.zip file in the "Assets" file list
 - done ✅
 
+## Check the new version
+
+You should update antl_phonenumber build environment to use the new version and check that all its tests still pass!
+
 ## Use the new version
 
 You can now update the Earthfile of your projects with the url of the new assets.zip file.
