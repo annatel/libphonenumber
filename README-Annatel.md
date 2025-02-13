@@ -13,7 +13,7 @@
   - `git diff vP.RE.V..antl-P.RE.V > patch.diff`
   - edit patch.diff, save all hunks that are not problematic in a new file named p1.diff and the problematic ones in p2.diff
   - `git apply p1.diff`
-  - manually apply p2.diff (probably changes regarding `resources/PhoneNumberMetadata.xml` ?)
+  - manually apply p2.diff (probably changes regarding `resources/PhoneNumberMetadata.xml` — WARNING: do **NOT** put comments inside tags)
 - check that the changes look good; you should see a small number (~4) of new or changed files: `git status`
 - if you need to do other changes, fix previous changes, etc, do it now
 - add the files to a new commit : `git add .github/workflows/release.yml Earthfile resources/PhoneNumberMetadata.xml ... your files`
