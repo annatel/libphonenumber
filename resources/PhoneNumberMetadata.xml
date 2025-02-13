@@ -14363,8 +14363,8 @@
       <mobile>
         <possibleLengths national="9"/>
         <exampleNumber>502345678</exampleNumber>
-        <nationalNumberPattern>
         <!-- Annatel patch: find other ranges (i.e. M2M, IOT...) at : https://data.gov.il/dataset/israel-numbering-plan/resource/74b44725-d8cc-4ae9-ba08-2c40a61ab68e -->
+        <nationalNumberPattern>
           130[23]\d{6}|
           501\d{6}|
           521\d{6}|
