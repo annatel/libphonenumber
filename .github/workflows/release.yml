@@ -1,49 +1,47 @@
 name: Release
 
 on:
-  release:
-    types:
-      - published
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
-  build-assets-linux-amd64:
+  linux:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    strategy:
+      matrix:
+        os: [alpine-3.17, ubuntu-20.04, ubuntu-22.04]
+        platform: [linux/amd64]
+        include:
+          - os: alpine-3.17
+            platform: linux/arm64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Download earthly
         run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.7.21/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-      - name: Set output
-        id: vars
-        run: echo tag=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
-      - name: Build amd64 assets
-        run: earthly --platform=linux/amd64 +libphonenumber
-      - name: Upload linux/amd64 assets
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_amd64.zip"
-  build-asset-linux-arm64:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Download earthly
-        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.7.21/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-      - name: Set output
-        id: vars
-        run: echo tag=${GITHUB_REF#refs/*/} >> $GITHUB_OUTPUT
+      - name: Get tag
+        run: echo TAG=${GITHUB_REF#refs/*/} >> $GITHUB_ENV
+      - name: Get version
+        run: echo VERSION=${TAG#v} >> $GITHUB_ENV
       - name: Set up QEMU
+        if: ${{ matrix.platform == 'linux/arm64' }}
         uses: docker/setup-qemu-action@v1
         with:
           image: tonistiigi/binfmt:latest
-          platforms: all
-      - name: Build arm64 assets
-        run: earthly --platform=linux/arm64 +libphonenumber
-      - name: Upload linux/arm64 assets
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: gh release upload --clobber ${{steps.vars.outputs.tag}} "cpp/build/assets_linux_arm64.zip"
+          platforms: arm64
+      - name: Build ${{matrix.os}} - ${{matrix.platform}} assets
+        run: earthly --platform=${{matrix.platform}} +libphonenumber --buildos=${{matrix.os}}
+      - name: Build deb package
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: earthly --platform=${{matrix.platform}} +libphonenumber-deb --buildos=${{matrix.os}} --version=${{env.VERSION}}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            cpp/build/*.zip
+            cpp/build/*.deb
