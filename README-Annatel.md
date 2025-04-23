@@ -6,8 +6,10 @@
 - cd libphonenumber/
 - If you didn't already add it, add Google's version as upstream : `git remote add upstream git@github.com:google/libphonenumber.git`
 - fetch all changes and tags : `git fetch --all --tag`
-- create a local branch for your new version basing it ont the tag from Google that you're interested in  (e.g. vL.AS.T): `git checkout -b antl-vL.AS.T vL.AS.T`
 - find what was the latest version from Annatel (e.g. vP.RE.V) : `git branch -r | grep antl`
+- checkout that version : `git checkout vP.RE.V`
+- update it to latest commit: `git pull`
+- create a local branch for your new version basing it ont the tag from Google that you're interested in  (e.g. vL.AS.T): `git checkout -b antl-vL.AS.T vL.AS.T`
 - apply Annatel's diff to your new branch : `git diff vP.RE.V..antl-vP.RE.V | git apply -`
   If it doesn't work automatically you'll have to do it manually, try that alternative procedure :
   - `git diff vP.RE.V..antl-P.RE.V > patch.diff`
@@ -39,7 +41,12 @@
 
 ## Check the new version
 
-You should update antl_phonenumber build environment to use the new version and check that all its tests still pass!
+Update antl_phonenumber:
+- go to your antl_phonenumber worktree and update it : `cd ../antl_phonenumber && git pull`
+- **if you changed Google's metadata, add relevant test numbers to `test/annatel_test_numbers.csv`**
+- update `Earthfile` to use your new version of the libphonenumber assets
+- check that all tests pass **with earthly** (it will automatically add Annatel specific tests) : `earthly -P +test`
+
 
 ## Use the new version
 
