@@ -105,7 +105,7 @@ find_package(absl)
 if(NOT absl_FOUND)
   # Overide abseil install rules for subprojects
   set(ABSL_ENABLE_INSTALL ON)
-  
+
   # Downloading the abseil sources at particular version to not catch up
   # with its new build requirements like min C++14 is mandated in that lib.
   FetchContent_Declare(
@@ -427,7 +427,7 @@ include_directories ("src")
 # Collate dependencies
 #----------------------------------------------------------------
 
-set (LIBRARY_DEPS ${ICU_LIB} ${PROTOBUF_LIB} absl::node_hash_set absl::strings absl::synchronization)
+set (LIBRARY_DEPS ${ICU_LIB} ${PROTOBUF_LIB} absl::absl_check absl::node_hash_set absl::strings absl::synchronization)
 
 if (USE_BOOST)
   list (APPEND LIBRARY_DEPS ${Boost_LIBRARIES})

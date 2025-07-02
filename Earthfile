@@ -10,6 +10,16 @@ alpine-3.17:
       rm -rf /var/cache/apk/*
   RUN apk add openjdk8-jre
 
+alpine-3.21:
+  FROM --platform=$BUILDPLATFORM alpine:3.21
+  RUN apk add --no-progress --update git build-base zip
+  RUN apk --no-cache --update add libgcc libstdc++ \
+      git make g++ \
+      build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl \
+      && \
+      rm -rf /var/cache/apk/*
+  RUN apk add openjdk8-jre
+
 ubuntu-20.04:
   FROM --platform=$BUILDPLATFORM ubuntu:20.04
   RUN apt-get update && apt-get -y upgrade
