@@ -102,10 +102,12 @@ endif ()
 # Find all the required libraries and programs.
 find_package(absl)
 
+set (ABSL_LIB absl::node_hash_set absl::strings absl::synchronization)
+
 if(NOT absl_FOUND)
   # Overide abseil install rules for subprojects
   set(ABSL_ENABLE_INSTALL ON)
-  
+
   # Downloading the abseil sources at particular version to not catch up
   # with its new build requirements like min C++14 is mandated in that lib.
   FetchContent_Declare(
@@ -128,7 +130,11 @@ if(NOT absl_FOUND)
   # https://github.com/abseil/abseil-cpp/issues/225
   set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
   add_subdirectory(${abseil-cpp_SOURCE_DIR} ${abseil-cpp_BINARY_DIR})
-endif()
+else ()
+  # Alpine 3.21, absl installed by default,
+  # protobuf generated with ABSL_DCHECK macros, so we need 'absl_check' deps
+  list (APPEND ABSL_LIB absl::absl_check)
+endif ()
 
 if (BUILD_TESTING)
   include (../tools/cpp/gtest.cmake)
@@ -427,7 +433,7 @@ include_directories ("src")
 # Collate dependencies
 #----------------------------------------------------------------
 
-set (LIBRARY_DEPS ${ICU_LIB} ${PROTOBUF_LIB} absl::node_hash_set absl::strings absl::synchronization)
+set (LIBRARY_DEPS ${ICU_LIB} ${PROTOBUF_LIB} ${ABSL_LIB})
 
 if (USE_BOOST)
   list (APPEND LIBRARY_DEPS ${Boost_LIBRARIES})
