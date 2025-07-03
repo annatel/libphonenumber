@@ -10,6 +10,17 @@ alpine-3.17:
       rm -rf /var/cache/apk/*
   RUN apk add openjdk8-jre
 
+alpine-3.21:
+  FROM --platform=$BUILDPLATFORM alpine:3.21
+  RUN apk add --no-progress --update git build-base zip
+  RUN apk --no-cache --update add libgcc libstdc++ \
+      git make g++ \
+      build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl \
+      && \
+      rm -rf /var/cache/apk/*
+  RUN apk add openjdk8-jre
+  ENV LIB_DEPS=absl::absl_check
+
 ubuntu-20.04:
   FROM --platform=$BUILDPLATFORM ubuntu:20.04
   RUN apt-get update && apt-get -y upgrade
@@ -47,10 +58,12 @@ libphonenumber:
 
   WORKDIR /libphonenumber/cpp/build
   RUN mkdir assets
-  RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
+  RUN sed -i 's/absl::synchronization/absl::synchronization ${LIB_DEPS}/' ../CMakeLists.txt
+  RUN cmake -DLIB_DEPS=${LIB_DEPS} -DCMAKE_INSTALL_PREFIX:PATH=./assets ..
   RUN make install
 
   WORKDIR assets
+  RUN rm -rf lib/cmake
   RUN zip -r ../libphonenumber_${TARGETARCH}-${buildos}.zip *
 
   SAVE ARTIFACT /libphonenumber/cpp/build/libphonenumber_${TARGETARCH}-${buildos}.zip AS LOCAL cpp/build/libphonenumber_${TARGETARCH}-${buildos}.zip
