@@ -61,7 +61,7 @@ libphonenumber:
   RUN make install
 
   WORKDIR assets
-  RUN rm -rf cmake
+  RUN rm -rf lib/cmake
   RUN zip -r ../libphonenumber_${TARGETARCH}-${buildos}.zip *
 
   SAVE ARTIFACT /libphonenumber/cpp/build/libphonenumber_${TARGETARCH}-${buildos}.zip AS LOCAL cpp/build/libphonenumber_${TARGETARCH}-${buildos}.zip
