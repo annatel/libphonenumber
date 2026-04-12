@@ -9,7 +9,7 @@ alpine-3.23:
       && \
       rm -rf /var/cache/apk/*
   RUN apk add openjdk8-jre
-  # ENV ABSL_HOTFIX=absl::absl_check
+  ENV ABSL_HOTFIX=absl::absl_check
 
 ubuntu-20.04:
   FROM --platform=$BUILDPLATFORM ubuntu:20.04
