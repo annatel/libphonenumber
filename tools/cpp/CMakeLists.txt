@@ -32,7 +32,7 @@ include (FetchContent)
 FetchContent_Declare(
     abseil-cpp
     GIT_REPOSITORY  https://github.com/abseil/abseil-cpp.git
-    GIT_TAG         origin/master
+    GIT_TAG         20220623.1
 )
 
 # Building the abseil binaries
