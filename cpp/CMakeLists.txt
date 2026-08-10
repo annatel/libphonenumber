@@ -427,7 +427,7 @@ include_directories ("src")
 # Collate dependencies
 #----------------------------------------------------------------
 
-set (LIBRARY_DEPS ${ICU_LIB} ${PROTOBUF_LIB} absl::node_hash_set absl::strings absl::synchronization)
+set (LIBRARY_DEPS ${ICU_LIB} ${PROTOBUF_LIB} absl::node_hash_set absl::strings absl::synchronization ${ABSL_HOTFIX})
 
 if (USE_BOOST)
   list (APPEND LIBRARY_DEPS ${Boost_LIBRARIES})
