@@ -1,7 +1,7 @@
 VERSION 0.6
 
-alpine-3.23:
-  FROM --platform=$BUILDPLATFORM alpine:3.23
+alpine-3.24:
+  FROM --platform=$BUILDPLATFORM alpine:3.24
   RUN apk add --no-progress --update git build-base zip
   RUN apk --no-cache --update add libgcc libstdc++ \
       git make g++ \

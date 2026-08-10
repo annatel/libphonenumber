@@ -28,8 +28,10 @@
 - go to https://github.com/annatel/libphonenumber/
 - In the right colmn, click on "Releases"
 - click on "Draft a new release"
-- click on the "Choose a tag" dropdown
-- in the "Find or create a new tag" field enter a name for the tag of the new release, (e.g. vL.AS.T-antl-0.42.0)
+- click on the "Tag: Select tag" dropdown
+- in the "Search or create a new tag" field enter a name for the tag of the new release, (e.g. vL.AS.T-antl-0.42.0)
+- click "Create new tag"
+- in the "Create new tag" dialog box that opens, click "Create"
 - click on the "Target: master" dropdown
 - in the "Branches" tab, chose the branch you created earlier (e.g. antl-vL.AS.T)
 - click on the "Publish release" button
