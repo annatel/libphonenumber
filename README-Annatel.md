@@ -49,10 +49,19 @@ Update antl_phonenumber:
 - update `Earthfile` to use your new version of the libphonenumber assets
 - check that all tests pass **with earthly** (it will automatically add Annatel specific tests) : `earthly -P +test`
 
+## Update apps that still use the old build system
+- update the Earthfile of your projects with the url of the new assets.zip file.
+  (Be carefull, it often appears twice in internal projects Earthfiles)
+- bump the version in mix.exs
+- commit / push / tag / wait for release / install
 
-## Use the new version
+## Update apps that use the new build system
+- in mvno/mvno_images, update LIBPHONENUMBER_REF in Dockerfile
+- commit / push / tag / wait for the new release
+- in mvno/ci-tools, update all references to mvno_images to use the new version you've just release
+- commit / push / tag (medium or minor! not major! or else there is more work to do) / wait for the new release
+- In projects that you want to update : bump the version in mix.exs
+- commit / push / tag / wait for release / install
 
-You can now update the Earthfile of your projects with the url of the new assets.zip file.
 
-Be carefull, it often appears twice in internal projects Earthfiles.
 
